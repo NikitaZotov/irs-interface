@@ -1,23 +1,24 @@
-import React, { useState } from "react";
+import * as React from "react";
+import { useState } from "react";
 import SearchIcon from "@material-ui/icons/Search";
 import MicIcon from "@material-ui/icons/Mic";
 import { Button } from "@material-ui/core";
 import "./Search.css";
 import { useStateValue } from "../hooks/StateProvider";
 import { useNavigate } from "react-router-dom";
-import { actionTypes } from "../hooks/reducer";
+import { ActionTypes } from "../hooks/reducer";
 
 function Search({ hideButtons = false }) {
     const [, dispatch] = useStateValue();
     const navigate = useNavigate();
     const [term, setTerm] = useState("");
 
-    const search = (e) => {
+    const search = (e: { preventDefault: () => void; }) => {
         e.preventDefault();
         console.log("search!");
 
         dispatch({
-            type: actionTypes.SET_SEARCH_TERM,
+            type: ActionTypes.SET_SEARCH_TERM,
             term: term,
         });
 

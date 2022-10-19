@@ -1,7 +1,7 @@
-import React from "react";
+import * as React from "react";
 import "./SearchPage.css";
 import { useStateValue } from "../hooks/StateProvider";
-import useGoogleSearch from "../hooks/useMachineSearch";
+import { useMachineSearch } from "../hooks/useMachineSearch";
 import { Link } from "react-router-dom";
 import Search from "../components/Search";
 import SearchIcon from "@material-ui/icons/Search";
@@ -13,7 +13,7 @@ import MoreVertIcon from "@material-ui/icons/MoreVert";
 
 function SearchPage() {
     const [{ term }, dispatch] = useStateValue();
-    const { data } = useGoogleSearch(term);
+    const { data } = useMachineSearch(term);
 
     console.log(data);
     return (

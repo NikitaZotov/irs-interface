@@ -1,10 +1,10 @@
-import React from 'react'
+import * as React from 'react'
 import './App.css';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from './pages/Home';
 import Search from "./components/Search";
 
-function App() {
+export const App = () => {
     return (
         <div className="app">
             <Router>
@@ -16,5 +16,3 @@ function App() {
         </div>
     );
 }
-
-export default App;

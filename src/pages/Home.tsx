@@ -1,5 +1,5 @@
 import { Avatar } from "@material-ui/core";
-import React from "react";
+import * as React from "react";
 import { Link } from "react-router-dom";
 import AppsIcon from "@material-ui/icons/Apps";
 import "./Home.css";
