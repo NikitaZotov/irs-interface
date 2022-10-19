@@ -1,4 +1,4 @@
-import { URL } from '@constants';
-import { IrsClient } from '../client/IrsClient';
+import { IRS_URL } from '../constants';
+import { IrsClient } from './client/IrsClient';
 
-export const client = new IrsClient(URL);
+export const client = new IrsClient(IRS_URL);
