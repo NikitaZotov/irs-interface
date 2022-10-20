@@ -1,8 +1,6 @@
-import { useState, useEffect } from "react";
+import { client } from "../api/Client"
 
-export const useMachineSearch = (term: any) => {
-    const [data, setData] = useState(null);
-
-
-    return { data };
+export const useMachineSearch = async (request: string) => {
+    const terms = request.split(" ")
+    return await client.getDocumentsSnippets(terms);
 };

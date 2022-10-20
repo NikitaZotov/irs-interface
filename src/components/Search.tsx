@@ -15,7 +15,6 @@ function Search({ hideButtons = false }) {
 
     const search = (e: { preventDefault: () => void; }) => {
         e.preventDefault();
-        console.log("search!");
 
         dispatch({
             type: ActionTypes.SET_SEARCH_TERM,
@@ -37,7 +36,6 @@ function Search({ hideButtons = false }) {
                     <Button onClick={search} type="submit" variant="outlined">
                         Google Search
                     </Button>
-                    <Button variant="outlined">I'm Feeling Lucky</Button>
                 </div>
             ) : (
                 <div className="search__buttons">
@@ -48,9 +46,6 @@ function Search({ hideButtons = false }) {
                         variant="outlined"
                     >
                         Google Search
-                    </Button>
-                    <Button className="search__buttonsHidden" variant="outlined">
-                        I'm Feeling Lucky
                     </Button>
                 </div>
             )}

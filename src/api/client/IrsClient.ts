@@ -1,4 +1,13 @@
-import { Term, Document, TAction, TAddDocumentsArgs, TGetDocumentsArgs, TWSCallback } from "./types";
+import {
+    Term,
+    Document,
+    TAction,
+    TAddDocumentsArgs,
+    TGetDocumentsArgs,
+    TWSCallback,
+    DocumentAttributes,
+    IGetDocuments, Snippet
+} from "./types";
 
 export interface Response<T = any> {
     id: number;
@@ -84,11 +93,49 @@ export class IrsClient {
     }
 
     public async getDocuments(terms: Term[]) {
-        return new Promise<Map<Term, Map<Document, number>>>((resolve) => {
-            if (!terms.length) return resolve(new Map());
+        return new Promise<[Map<string, DocumentAttributes[]>, Map<string, Document>]>((resolve) => {
+            if (!terms.length) return resolve([new Map(), new Map()]);
 
             this.sendMessage("get_documents", terms, (response) => {
-                resolve(response.payload);
+                const payload = JSON.parse(response.payload.toString()) as IGetDocuments;
+                const attributes = payload.attributes;
+
+                let documentsAttributes = new Map<string, DocumentAttributes[]>();
+                attributes.forEach((attribute, index) => {
+                    let documentsAttribute: DocumentAttributes[] = [];
+                    attribute.documents.forEach((value, key) => {
+                        documentsAttribute.push({ hash: key, significancy: value });
+                    });
+                    documentsAttributes.set(terms[index], documentsAttribute);
+                });
+
+                const documents = payload.documents;
+                resolve([documentsAttributes, documents]);
+            });
+        });
+    }
+
+    public async getDocumentsSnippets(terms: Term[]) {
+        return new Promise<Snippet[]>((resolve) => {
+            if (!terms.length) return resolve([]);
+
+            this.sendMessage("get_documents", terms, (response) => {
+                const payload = JSON.parse(response.payload.toString()) as IGetDocuments;
+                const attributes = payload.attributes;
+                const documents = payload.documents;
+
+                let cachedDocuments = new Map<string, Snippet>();
+                attributes.forEach((attribute, index) => {
+                    attribute.documents.forEach((value, key) => {
+                        cachedDocuments.get(key)
+                            ? cachedDocuments.get(key)?.terms.push(terms[index])
+                            : cachedDocuments.set(key, { document: documents.get(key) ?? "", significancy: value, terms: [terms[index]] });
+                    });
+
+                });
+
+                const result = Array.from(cachedDocuments.values()).filter(snippet => snippet.terms.length == terms.length);
+                resolve(result);
             });
         });
     }

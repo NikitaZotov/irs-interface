@@ -9,6 +9,27 @@ export interface Response<
     payload: Payload;
 }
 
+export interface IGetDocumentsAttribute {
+    term: string,
+    documents: Map<string, number>,
+}
+
+export interface IGetDocuments {
+    attributes: IGetDocumentsAttribute[],
+    documents: Map<string, Document>,
+}
+
+export interface DocumentAttributes {
+    hash: string,
+    significancy: number,
+}
+
+export interface Snippet {
+    document: Document,
+    terms: Term[],
+    significancy: number,
+}
+
 export type TAction =
     | "add_documents"
     | "get_documents";
@@ -32,5 +53,5 @@ export type TAddDocumentsArgs = Args<
 export type TGetDocumentsArgs = Args<
     "get_documents",
     Term[],
-    Map<Term, Map<Document, number>>
+    [DocumentAttributes[][], Map<string, Document>] | Snippet[]
     >;

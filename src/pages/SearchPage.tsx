@@ -1,8 +1,7 @@
-import * as React from "react";
-import "./SearchPage.css";
+import React from "react";
 import { useStateValue } from "../hooks/StateProvider";
 import { useMachineSearch } from "../hooks/useMachineSearch";
-import { Link } from "react-router-dom";
+import "./SearchPage.css";
 import Search from "../components/Search";
 import SearchIcon from "@material-ui/icons/Search";
 import DescriptionIcon from "@material-ui/icons/Description";
@@ -10,12 +9,15 @@ import ImageIcon from "@material-ui/icons/Image";
 import LocalOfferIcon from "@material-ui/icons/LocalOffer";
 import RoomIcon from "@material-ui/icons/Room";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
+import { Link } from "react-router-dom";
 
-function SearchPage() {
-    const [{ term }, dispatch] = useStateValue();
-    const { data } = useMachineSearch(term);
+async function SearchPage() {
+    const [{ terms }, dispatch] = useStateValue();
 
-    console.log(data);
+    const snippets = await useMachineSearch(terms);
+
+    console.log(snippets);
+
     return (
         <div className="searchPage">
             <div className="searchPage__header">
@@ -68,6 +70,26 @@ function SearchPage() {
                     </div>
                 </div>
             </div>
+
+            {terms && (
+                <div className="searchPage__results">
+                    <p className="searchPage__resultCount">
+                        {/*About {snippets.searchInformation.formattedTotalResults} results (*/}
+                        {/*{snippets.searchInformation.formattedSearchTime} seconds) for{" "}*/}
+                        <strong>{terms}</strong>
+                    </p>
+
+                    {snippets.map((item) => (
+                        <div className="searchPage__result">
+                            <a className="searchPage__resultTitle">
+                                <h2>{item.document}</h2>
+                            </a>
+
+                            <p className="searchPage__resultSnippet">{item.terms.toString()}</p>
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
 }
