@@ -1,9 +1,9 @@
 export interface IState {
-    term: null,
+    terms: null,
 }
 
 export const initialState = {
-    term: null,
+    terms: null,
 };
 
 export enum ActionTypes {
@@ -12,7 +12,7 @@ export enum ActionTypes {
 
 export type IAction = {
     type: ActionTypes.SET_SEARCH_TERM,
-    term: any
+    terms: any
 }
 
 const reducer = (state: IState, action: IAction): IState => {
@@ -21,7 +21,7 @@ const reducer = (state: IState, action: IAction): IState => {
         case ActionTypes.SET_SEARCH_TERM:
             return {
                 ...state,
-                term: action.term,
+                terms: action.terms,
             };
 
         default:

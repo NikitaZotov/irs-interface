@@ -25,9 +25,9 @@ export interface DocumentAttributes {
 }
 
 export interface Snippet {
-    document: Document,
+    document: Document | any,
     terms: Term[],
-    significancy: number,
+    significancy: number | any,
 }
 
 export type TAction =
@@ -53,5 +53,5 @@ export type TAddDocumentsArgs = Args<
 export type TGetDocumentsArgs = Args<
     "get_documents",
     Term[],
-    [DocumentAttributes[][], Map<string, Document>] | Snippet[]
+    IGetDocuments
     >;

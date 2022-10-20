@@ -11,10 +11,10 @@ import RoomIcon from "@material-ui/icons/Room";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { Link } from "react-router-dom";
 
-async function SearchPage() {
+function SearchPage() {
     const [{ terms }, dispatch] = useStateValue();
 
-    const snippets = await useMachineSearch(terms);
+    const snippets = useMachineSearch(terms);
 
     console.log(snippets);
 

@@ -1,3 +1,3 @@
-const defaultIrsUrl = 'ws://localhost:8090';
+const defaultIrsUrl = 'ws://localhost:7090';
 
-export const IRS_URL = process.env.SC_URL ?? defaultIrsUrl;
+export const IRS_URL = defaultIrsUrl;

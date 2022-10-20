@@ -11,14 +11,14 @@ import { ActionTypes } from "../hooks/reducer";
 function Search({ hideButtons = false }) {
     const [, dispatch] = useStateValue();
     const navigate = useNavigate();
-    const [term, setTerm] = useState("");
+    const [terms, setTerm] = useState("");
 
     const search = (e: { preventDefault: () => void; }) => {
         e.preventDefault();
 
         dispatch({
             type: ActionTypes.SET_SEARCH_TERM,
-            term: term,
+            terms: terms,
         });
 
         navigate(`/search`);
@@ -28,7 +28,7 @@ function Search({ hideButtons = false }) {
         <form className="search">
             <div className="search__input">
                 <SearchIcon className="search__inputIcon" />
-                <input value={term} onChange={(e) => setTerm(e.target.value)} />
+                <input value={terms} onChange={(e) => setTerm(e.target.value)} />
                 <MicIcon />
             </div>
             {!hideButtons ? (

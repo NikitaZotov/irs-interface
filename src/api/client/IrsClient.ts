@@ -120,18 +120,35 @@ export class IrsClient {
             if (!terms.length) return resolve([]);
 
             this.sendMessage("get_documents", terms, (response) => {
-                const payload = JSON.parse(response.payload.toString()) as IGetDocuments;
+                const payload = response.payload;
                 const attributes = payload.attributes;
-                const documents = payload.documents;
+
+                const toMap = (object: any) => {
+                    let map = new Map();
+                    for (let i in object) {
+                        map.set(i, object[i]);
+                    }
+                    return map;
+                }
+
+                const documents = toMap(payload.documents);
 
                 let cachedDocuments = new Map<string, Snippet>();
                 attributes.forEach((attribute, index) => {
-                    attribute.documents.forEach((value, key) => {
-                        cachedDocuments.get(key)
-                            ? cachedDocuments.get(key)?.terms.push(terms[index])
-                            : cachedDocuments.set(key, { document: documents.get(key) ?? "", significancy: value, terms: [terms[index]] });
+                    toMap(attribute.documents).forEach((value, key) => {
+                        let cached = cachedDocuments.get(key);
+                        if (!cached) {
+                            cachedDocuments.set(key, {
+                                document: documents.get(key),
+                                significancy: value,
+                                terms: []
+                            });
+                        }
+                        cached = cachedDocuments.get(key);
+                        if (cached) {
+                            cached.terms.push(terms[index]);
+                        }
                     });
-
                 });
 
                 const result = Array.from(cachedDocuments.values()).filter(snippet => snippet.terms.length == terms.length);
