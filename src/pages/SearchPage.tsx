@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import { useStateValue } from "../hooks/StateProvider";
 import { useMachineSearch } from "../hooks/useMachineSearch";
 import "./SearchPage.css";
@@ -9,14 +9,31 @@ import ImageIcon from "@material-ui/icons/Image";
 import LocalOfferIcon from "@material-ui/icons/LocalOffer";
 import RoomIcon from "@material-ui/icons/Room";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import {ActionTypes} from "../hooks/reducer";
+import {Snippet} from "../api/client/types";
 
 function SearchPage() {
     const [{ terms }, dispatch] = useStateValue();
 
+    const startTime = performance.now();
     const snippets = useMachineSearch(terms);
+    const endTime = performance.now();
 
-    console.log(snippets);
+    const perfTime = endTime - startTime;
+
+    const navigate = useNavigate();
+
+    const viewDocument = (e: { preventDefault: () => void; }, snippet: Snippet) => {
+        e.preventDefault();
+
+        dispatch({
+            type: ActionTypes.SET_SNIPPET,
+            snippet: snippet,
+        });
+
+        navigate(`/document/` + snippet.id);
+    };
 
     return (
         <div className="searchPage">
@@ -74,19 +91,24 @@ function SearchPage() {
             {terms && (
                 <div className="searchPage__results">
                     <p className="searchPage__resultCount">
-                        {/*About {snippets.searchInformation.formattedTotalResults} results (*/}
-                        {/*{snippets.searchInformation.formattedSearchTime} seconds) for{" "}*/}
+                        About {snippets.length} results (
+                        {perfTime} seconds) for{" "}
                         <strong>{terms}</strong>
                     </p>
 
                     {snippets.map((item) => (
-                        <div className="searchPage__result">
-                            <a className="searchPage__resultTitle">
-                                <h2>{item.document}</h2>
-                            </a>
+                        <>
+                            <div className="searchPage__result">
+                                <a className="searchPage__resultTitle">
+                                    <h2
+                                        onClick={e => viewDocument(e, item)}>
+                                            {item.document.substring(0, 100) + "..."}
+                                    </h2>
+                                </a>
 
-                            <p className="searchPage__resultSnippet">{item.terms.toString()}</p>
-                        </div>
+                                <p className="searchPage__resultSnippet">{item.terms.map(term => " " + term).toString()}</p>
+                            </div>
+                        </>
                     ))}
                 </div>
             )}

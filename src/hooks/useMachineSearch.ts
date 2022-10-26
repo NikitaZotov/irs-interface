@@ -7,7 +7,7 @@ export const useMachineSearch = (request: string) => {
     console.log(request);
     useEffect(() => {
         const fetchData = async () => {
-            const terms = request.split(" ");
+            const terms = request ? request.split(" ") : [];
             client.getDocumentsSnippets(terms).then(snippets => {
                 setData(snippets);
             });

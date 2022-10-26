@@ -1,18 +1,22 @@
 export interface IState {
     terms: null,
+    snippet: null,
 }
 
 export const initialState = {
     terms: null,
+    snippet: null,
 };
 
 export enum ActionTypes {
     SET_SEARCH_TERM = "SET_SEARCH_TERM",
+    SET_SNIPPET = "SET_SNIPPET",
 }
 
 export type IAction = {
-    type: ActionTypes.SET_SEARCH_TERM,
-    terms: any
+    type: ActionTypes.SET_SEARCH_TERM | ActionTypes.SET_SNIPPET,
+    terms: any,
+    snippet: any,
 }
 
 const reducer = (state: IState, action: IAction): IState => {
@@ -22,6 +26,14 @@ const reducer = (state: IState, action: IAction): IState => {
             return {
                 ...state,
                 terms: action.terms,
+                snippet: action.snippet,
+            };
+
+        case ActionTypes.SET_SNIPPET:
+            return {
+                ...state,
+                terms: action.terms,
+                snippet: action.snippet,
             };
 
         default:

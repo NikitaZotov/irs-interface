@@ -2,11 +2,12 @@ import {
     Term,
     Document,
     TAction,
+    Snippet,
     TAddDocumentsArgs,
     TGetDocumentsArgs,
     TWSCallback,
     DocumentAttributes,
-    IGetDocuments, Snippet
+    IGetDocuments
 } from "./types";
 
 export interface Response<T = any> {
@@ -139,6 +140,7 @@ export class IrsClient {
                         let cached = cachedDocuments.get(key);
                         if (!cached) {
                             cachedDocuments.set(key, {
+                                id: key,
                                 document: documents.get(key),
                                 significancy: value,
                                 terms: []

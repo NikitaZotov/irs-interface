@@ -25,6 +25,7 @@ export interface DocumentAttributes {
 }
 
 export interface Snippet {
+    id: string,
     document: Document | any,
     terms: Term[],
     significancy: number | any,
