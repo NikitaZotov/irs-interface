@@ -26,13 +26,11 @@ const reducer = (state: IState, action: IAction): IState => {
             return {
                 ...state,
                 terms: action.terms,
-                snippet: action.snippet,
             };
 
         case ActionTypes.SET_SNIPPET:
             return {
                 ...state,
-                terms: action.terms,
                 snippet: action.snippet,
             };
 

@@ -4,7 +4,6 @@ import { Snippet } from "../api/client/types";
 
 export const useMachineSearch = (request: string) => {
     const [data, setData] = useState(new Array<Snippet>());
-    console.log(request);
     useEffect(() => {
         const fetchData = async () => {
             const terms = request ? request.split(" ") : [];

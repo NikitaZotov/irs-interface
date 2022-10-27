@@ -13,7 +13,7 @@ function Search({ hideButtons = false }) {
     const navigate = useNavigate();
     const [terms, setTerm] = useState("");
 
-    const search = (e: { preventDefault: () => void; }) => {
+    const search = (e: any) => {
         e.preventDefault();
 
         dispatch({

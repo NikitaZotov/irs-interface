@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useStateValue } from "../hooks/StateProvider";
 import { useMachineSearch } from "../hooks/useMachineSearch";
 import "./SearchPage.css";
@@ -10,21 +10,16 @@ import LocalOfferIcon from "@material-ui/icons/LocalOffer";
 import RoomIcon from "@material-ui/icons/Room";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { Link, useNavigate } from "react-router-dom";
-import {ActionTypes} from "../hooks/reducer";
-import {Snippet} from "../api/client/types";
+import { ActionTypes } from "../hooks/reducer";
+import { Snippet } from "../api/client/types";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 function SearchPage() {
     const [{ terms }, dispatch] = useStateValue();
 
-    const startTime = performance.now();
-    const snippets = useMachineSearch(terms);
-    const endTime = performance.now();
-
-    const perfTime = endTime - startTime;
-
     const navigate = useNavigate();
 
-    const viewDocument = (e: { preventDefault: () => void; }, snippet: Snippet) => {
+    const viewDocument = (e: any, snippet: Snippet) => {
         e.preventDefault();
 
         dispatch({
@@ -34,6 +29,23 @@ function SearchPage() {
 
         navigate(`/document/` + snippet.id);
     };
+
+    const [getTerms, setTerms,] = useLocalStorage("terms");
+
+    useEffect(() => {
+        const local = getTerms();
+        local
+        ? dispatch({
+            terms: local,
+        })
+        : setTerms(terms);
+    }, [getTerms, setTerms]);
+
+    const startTime = performance.now();
+    const snippets = useMachineSearch(terms);
+    const endTime = performance.now();
+
+    const perfTime = endTime - startTime;
 
     return (
         <div className="searchPage">
@@ -47,7 +59,7 @@ function SearchPage() {
                 </Link>
 
                 <div className="searchPage__headerBody">
-                    <Search hideButtons />
+                    {/*<Search hideButtons />*/}
                     <div className="searchPage__options">
                         <div className="searchPage__optionsLeft">
                             <div className="searchPage__option">
@@ -88,7 +100,8 @@ function SearchPage() {
                 </div>
             </div>
 
-            {terms && (
+            {terms
+            ? (
                 <div className="searchPage__results">
                     <p className="searchPage__resultCount">
                         About {snippets.length} results (
@@ -97,19 +110,31 @@ function SearchPage() {
                     </p>
 
                     {snippets.map((item) => (
-                        <>
-                            <div className="searchPage__result">
-                                <a className="searchPage__resultTitle">
-                                    <h2
-                                        onClick={e => viewDocument(e, item)}>
-                                            {item.document.substring(0, 100) + "..."}
-                                    </h2>
-                                </a>
+                        <div className="searchPage__result">
+                            <a className="searchPage__resultTitle">
+                                {"http:://localhost:3000/document/" + item.id}
+                                <h2
+                                    onClick={e => viewDocument(e, item)}>
+                                        {item.document.substring(0, 250) + "..."}
+                                </h2>
+                            </a>
 
-                                <p className="searchPage__resultSnippet">{item.terms.map(term => " " + term).toString()}</p>
-                            </div>
-                        </>
+                            <p className="searchPage__resultSnippet">{"Used keys: " + item.terms.map(term => " " + term).toString()}</p>
+                        </div>
                     ))}
+                </div>
+            )
+            : (
+                <div className="searchPage__results">
+                    <p className="searchPage__resultCount">
+                        About {snippets.length} results (
+                        {perfTime} seconds) for{" "}
+                        <strong>{terms}</strong>
+                    </p>
+
+                    <div className="searchPage__no_result">
+                        <p>Oops... There are no found information by this request.</p>
+                    </div>
                 </div>
             )}
         </div>

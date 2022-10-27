@@ -64,6 +64,14 @@
 
 .searchPage__result {
     margin: 40px 0;
+    border: 1px solid lightgray;
+    padding: 10px 10px;
+    border-radius: 15px;
+    width: 75vw;
+}
+
+.searchPage__no_result {
+    margin: 40px 0;
 }
 
 .searchPage__resultCount {
