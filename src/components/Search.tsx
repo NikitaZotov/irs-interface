@@ -1,12 +1,12 @@
 import * as React from "react";
-import { useState } from "react";
+import {useEffect, useState} from "react";
 import SearchIcon from "@material-ui/icons/Search";
-import MicIcon from "@material-ui/icons/Mic";
 import { Button } from "@material-ui/core";
 import "./Search.css";
 import { useStateValue } from "../hooks/StateProvider";
 import { useNavigate } from "react-router-dom";
 import { ActionTypes } from "../hooks/reducer";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 function Search({ hideButtons = false }) {
     const [, dispatch] = useStateValue();
@@ -24,12 +24,23 @@ function Search({ hideButtons = false }) {
         navigate(`/search`);
     };
 
+    const [getLocalTerms, setLocalTerms,] = useLocalStorage("terms");
+
+    const onChange = (e: any) => {
+        setTerm(e.target.value);
+        setLocalTerms(e.target.value);
+    }
+
+    useEffect(() => {
+        setTerm(getLocalTerms());
+    }, [getLocalTerms]);
+
     return (
         <form className="search">
             <div className="search__input">
                 <SearchIcon className="search__inputIcon" />
-                <input value={terms} onChange={(e) => setTerm(e.target.value)} />
-                <MicIcon />
+                <input value={terms} onChange={onChange} />
+                {/*<MicIcon />*/}
             </div>
             {!hideButtons ? (
                 <div className="search__buttons">
