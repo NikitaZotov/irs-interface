@@ -15,10 +15,19 @@ import { Snippet } from "../api/client/types";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 
 function SearchPage() {
-    const [{ terms }, dispatch] = useStateValue();
+    const [{ input }, dispatch] = useStateValue();
+    const [terms, setTerms] = useState(input);
+
+    const [getLocalTerms, setLocalTerms,] = useLocalStorage("terms");
+
+    useEffect(() => {
+        const local = getLocalTerms();
+        local
+        ? setTerms(local)
+        : setLocalTerms(terms);
+    }, [getLocalTerms, setLocalTerms]);
 
     const navigate = useNavigate();
-
     const viewDocument = (e: any, snippet: Snippet) => {
         e.preventDefault();
 
@@ -30,22 +39,14 @@ function SearchPage() {
         navigate(`/document/` + snippet.id);
     };
 
-    const [getTerms, setTerms,] = useLocalStorage("terms");
+    const [snippets, perfTime] = ((terms: string) => {
+        const startTime = performance.now();
+        const snippets = useMachineSearch(terms);
+        const endTime = performance.now();
 
-    useEffect(() => {
-        const local = getTerms();
-        local
-        ? dispatch({
-            terms: local,
-        })
-        : setTerms(terms);
-    }, [getTerms, setTerms]);
-
-    const startTime = performance.now();
-    const snippets = useMachineSearch(terms);
-    const endTime = performance.now();
-
-    const perfTime = endTime - startTime;
+        const perfTime = endTime - startTime;
+        return [snippets, perfTime];
+    })(terms);
 
     return (
         <div className="searchPage">
@@ -59,44 +60,7 @@ function SearchPage() {
                 </Link>
 
                 <div className="searchPage__headerBody">
-                    {/*<Search hideButtons />*/}
-                    <div className="searchPage__options">
-                        <div className="searchPage__optionsLeft">
-                            <div className="searchPage__option">
-                                <SearchIcon />
-                                <Link to="/all">All</Link>
-                            </div>
-                            <div className="searchPage__option">
-                                <DescriptionIcon />
-                                <Link to="/news">News</Link>
-                            </div>
-                            <div className="searchPage__option">
-                                <ImageIcon />
-                                <Link to="/images">Images</Link>
-                            </div>
-                            <div className="searchPage__option">
-                                <LocalOfferIcon />
-                                <Link to="/shopping">shopping</Link>
-                            </div>
-                            <div className="searchPage__option">
-                                <RoomIcon />
-                                <Link to="/maps">maps</Link>
-                            </div>
-                            <div className="searchPage__option">
-                                <MoreVertIcon />
-                                <Link to="/more">more</Link>
-                            </div>
-                        </div>
-
-                        <div className="searchPage__optionsRight">
-                            <div className="searchPage__option">
-                                <Link to="/settings">Settings</Link>
-                            </div>
-                            <div className="searchPage__option">
-                                <Link to="/tools">Tools</Link>
-                            </div>
-                        </div>
-                    </div>
+                    <Search hideButtons />
                 </div>
             </div>
 
@@ -104,9 +68,7 @@ function SearchPage() {
             ? (
                 <div className="searchPage__results">
                     <p className="searchPage__resultCount">
-                        About {snippets.length} results (
-                        {perfTime} seconds) for{" "}
-                        <strong>{terms}</strong>
+                        About {snippets.length} results ({perfTime} seconds) for{" "} <strong>{terms}</strong>
                     </p>
 
                     {snippets.map((item) => (
