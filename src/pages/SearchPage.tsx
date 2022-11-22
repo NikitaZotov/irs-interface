@@ -3,16 +3,11 @@ import { useStateValue } from "../hooks/StateProvider";
 import { useMachineSearch } from "../hooks/useMachineSearch";
 import "./SearchPage.css";
 import Search from "../components/Search";
-import SearchIcon from "@material-ui/icons/Search";
-import DescriptionIcon from "@material-ui/icons/Description";
-import ImageIcon from "@material-ui/icons/Image";
-import LocalOfferIcon from "@material-ui/icons/LocalOffer";
-import RoomIcon from "@material-ui/icons/Room";
-import MoreVertIcon from "@material-ui/icons/MoreVert";
 import { Link, useNavigate } from "react-router-dom";
 import { ActionTypes } from "../hooks/reducer";
 import { Snippet } from "../api/client/types";
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import SearchLogo from "./search/search_logo.png";
 
 function SearchPage() {
     const [{ input }, dispatch] = useStateValue();
@@ -54,7 +49,7 @@ function SearchPage() {
                 <Link to="/">
                     <img
                         className="searchPage__logo"
-                        src="https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png"
+                        src={SearchLogo}
                         alt=""
                     />
                 </Link>
@@ -81,7 +76,9 @@ function SearchPage() {
                                 </h2>
                             </a>
 
-                            <p className="searchPage__resultSnippet">{"Used keys: " + item.terms.map(term => " " + term).toString()}</p>
+                            <p className="searchPage__resultSnippet">
+                                {"Used keys: " + item.terms.map(term => " " + term).toString()}
+                            </p>
                         </div>
                     ))}
                 </div>

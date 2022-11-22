@@ -10,9 +10,9 @@ export const App = () => {
         <div className="app">
             <Router>
                 <Routes>
-                    <Route path="/search" element={<SearchPage />} />
-                    <Route path="/" element={<Home />} />
-                    <Route path="/document/*" element={<DocumentPage />} />
+                    <Route path="/search" element={<SearchPage/>} />
+                    <Route path="/" element={<Home/>} />
+                    <Route path="/document/*" element={<DocumentPage/>} />
                 </Routes>
             </Router>
         </div>
