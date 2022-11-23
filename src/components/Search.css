@@ -1,13 +1,12 @@
 .search__input {
     display: flex;
     align-items: center;
-    height: 30px;
     border: 1px solid lightgray;
+    height: 30px;
     padding: 10px 20px;
     border-radius: 999px;
-    width: 75vw;
-    margin: 0 auto;
-    margin-top: 40px;
+    min-width: 700px;
+    margin: 10px auto 5px;
     max-width: 560px;
 }
 
@@ -20,7 +19,6 @@
 
 .search__input > input:focus {
     outline-width: 0;
-    outline: none;
 }
 
 .search__inputIcon {
@@ -36,8 +34,8 @@
 .search__buttons button {
     margin: 5px;
     padding: 7px 15px;
-    background-color: #f8f8f8;
     border: 1px solid white;
+    background-color: #f8f8f8;
     text-transform: inherit;
     color: #5f6368;
 }
@@ -48,19 +46,6 @@
     background-color: #f8f8f8;
     border: 1px solid #c6c6c6;
     color: #222;
-}
-
-
-@media screen and (max-width: 750px) {
-    .search {
-        max-width: 560px;
-    }
-    .search__input > input:focus {
-        outline: none;
-    }
-    .search__input {
-        height: 20px;
-    }
 }
 
 .search__buttonsHidden {

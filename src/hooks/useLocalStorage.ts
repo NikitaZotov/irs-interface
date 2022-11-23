@@ -1,7 +1,7 @@
 export const useLocalStorage = (name: string): Function[] => {
     const getLocalStorage = () => {
         const local = localStorage.getItem(name);
-        if (local != null) {
+        if (local !== null && local !== "undefined") {
             return JSON.parse(local);
         }
         return null;
