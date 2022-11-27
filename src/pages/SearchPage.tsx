@@ -66,7 +66,7 @@ function SearchPage() {
                         About {snippets.length} results ({perfTime} seconds) for{" "} <strong>{terms}</strong>
                     </p>
 
-                    {snippets.map((item) => (
+                    {snippets.map((item, index) => (
                         <div className="searchPage__result">
                             <a className="searchPage__resultTitle">
                                 {"http:://localhost:3000/document/" + item.id}
@@ -78,6 +78,9 @@ function SearchPage() {
 
                             <p className="searchPage__resultSnippet">
                                 {"Used keys: " + item.terms.map(term => " " + term).toString()}
+                            </p>
+                            <p className="searchPage__resultSnippet">
+                                {"Language: " + item.lang}
                             </p>
                         </div>
                     ))}

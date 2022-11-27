@@ -8,7 +8,11 @@ export const useMachineSearch = (request: string) => {
         const fetchData = async () => {
             const terms = request ? request.split(" ") : [];
             client.getDocumentsSnippets(terms).then(snippets => {
-                setData(snippets);
+                const documents = snippets.map((item: Snippet) => item.document);
+                client.getDocumentsLangs(documents).then(langs => {
+                    snippets.forEach((snippet, index) => snippet.lang = langs.at(index) as string);
+                    setData(snippets);
+                });
             });
         };
 

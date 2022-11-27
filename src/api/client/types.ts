@@ -29,11 +29,13 @@ export interface Snippet {
     document: Document | any,
     terms: Term[],
     significancy: number | any,
+    lang: string,
 }
 
 export type TAction =
     | "add_documents"
-    | "get_documents";
+    | "get_documents"
+    | "get_langs";
 
 export type TWSCallback<
     Payload extends unknown = unknown,
@@ -55,4 +57,10 @@ export type TGetDocumentsArgs = Args<
     "get_documents",
     Term[],
     IGetDocuments
+    >;
+
+export type TGetDocumentsLangsArgs = Args<
+    "get_langs",
+    Document[],
+    string[]
     >;
