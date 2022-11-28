@@ -1,4 +1,4 @@
-import { client } from "../api/Client"
+import { client, mlClient } from "../api/Client"
 import { useEffect, useState } from "react";
 import { Snippet } from "../api/client/types";
 
@@ -9,9 +9,11 @@ export const useMachineSearch = (request: string) => {
             const terms = request ? request.split(" ") : [];
             client.getDocumentsSnippets(terms).then(snippets => {
                 const documents = snippets.map((item: Snippet) => item.document);
-                client.getDocumentsLangs(documents).then(langs => {
-                    snippets.forEach((snippet, index) => snippet.lang = langs.at(index) as string);
-                    setData(snippets);
+                [client, mlClient].forEach(client => {
+                    client.getDocumentsLangs(documents).then(langs => {
+                        snippets.forEach((snippet, index) => snippet.langs.push(langs.at(index) as string));
+                        setData(snippets);
+                    });
                 });
             });
         };

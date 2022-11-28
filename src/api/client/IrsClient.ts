@@ -146,7 +146,7 @@ export class IrsClient {
                                 document: documents.get(key),
                                 significancy: value,
                                 terms: [],
-                                lang: ""
+                                langs: []
                             });
                         }
                         cached = cachedDocuments.get(key);

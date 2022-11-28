@@ -29,7 +29,7 @@ export interface Snippet {
     document: Document | any,
     terms: Term[],
     significancy: number | any,
-    lang: string,
+    langs: Array<string>,
 }
 
 export type TAction =
