@@ -30,12 +30,14 @@ export interface Snippet {
     terms: Term[],
     significancy: number | any,
     langs: Array<string>,
+    summarization: Document,
 }
 
 export type TAction =
     | "add_documents"
     | "get_documents"
-    | "get_langs";
+    | "get_langs"
+    | "get_summars";
 
 export type TWSCallback<
     Payload extends unknown = unknown,
@@ -61,6 +63,12 @@ export type TGetDocumentsArgs = Args<
 
 export type TGetDocumentsLangsArgs = Args<
     "get_langs",
+    Document[],
+    string[]
+    >;
+
+export type TGetDocumentsSummarizationsArgs = Args<
+    "get_summars",
     Document[],
     string[]
     >;

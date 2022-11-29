@@ -8,7 +8,8 @@ import {
     TWSCallback,
     DocumentAttributes,
     IGetDocuments,
-    TGetDocumentsLangsArgs
+    TGetDocumentsLangsArgs,
+    TGetDocumentsSummarizationsArgs
 } from "./types";
 
 export interface Response<T = any> {
@@ -61,6 +62,7 @@ export class IrsClient {
     private sendMessage(...args: TAddDocumentsArgs): void;
     private sendMessage(...args: TGetDocumentsArgs): void;
     private sendMessage(...args: TGetDocumentsLangsArgs): void;
+    private sendMessage(...args: TGetDocumentsSummarizationsArgs): void;
 
     private sendMessage(actionType: string, payload: unknown, callback: TWSCallback<any>): void {
         this._eventID++;
@@ -146,7 +148,8 @@ export class IrsClient {
                                 document: documents.get(key),
                                 significancy: value,
                                 terms: [],
-                                langs: []
+                                langs: [],
+                                summarization: "",
                             });
                         }
                         cached = cachedDocuments.get(key);
@@ -167,6 +170,16 @@ export class IrsClient {
             if (!documents.length) return resolve([]);
 
             this.sendMessage("get_langs", documents, (response) => {
+                resolve(response.payload);
+            });
+        });
+    }
+
+    public async getDocumentsSummarizations(documents: Document[]) {
+        return new Promise<string[]>((resolve) => {
+            if (!documents.length) return resolve([]);
+
+            this.sendMessage("get_summars", documents, (response) => {
                 resolve(response.payload);
             });
         });

@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useStateValue } from "../hooks/StateProvider";
-import { useMachineSearch } from "../hooks/useMachineSearch";
 import "./SearchPage.css";
 import Search from "../components/Search";
 import { Link, useNavigate } from "react-router-dom";
 import { ActionTypes } from "../hooks/reducer";
 import { Snippet } from "../api/client/types";
-import { useLocalStorage } from "../hooks/useLocalStorage";
 import SearchLogo from "./search/search_logo.png";
+import DownloadLink from "react-download-link"
+import { useLocalStorage } from "../hooks/useLocalStorage";
+import { useMachineSearch } from "../hooks/useMachineSearch";
+import { getDocumentSummarization } from "../hooks/useSummarization";
 
 function SearchPage() {
     const [{ input }, dispatch] = useStateValue();
@@ -82,6 +84,13 @@ function SearchPage() {
                             <p className="searchPage__resultSnippet">
                                 {"Language: " + item.langs.at(0) + "(FWM), " + item.langs.at(1) + "(MLM)"}
                             </p>
+                            <a href={"http:://localhost:3000/document/" + item.id} target="_blank" rel="noopener noreferrer" download>
+                                <DownloadLink
+                                    label="Download"
+                                    filename="fileName.txt"
+                                    exportFile={async () => await getDocumentSummarization(item.document)}
+                                />
+                            </a>
                         </div>
                     ))}
                 </div>

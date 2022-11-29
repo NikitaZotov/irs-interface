@@ -12,9 +12,10 @@ export const useMachineSearch = (request: string) => {
                 [client, mlClient].forEach(client => {
                     client.getDocumentsLangs(documents).then(langs => {
                         snippets.forEach((snippet, index) => snippet.langs.push(langs.at(index) as string));
-                        setData(snippets);
                     });
                 });
+
+                setData(snippets);
             });
         };
 
