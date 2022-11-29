@@ -1,13 +1,12 @@
 import * as React from 'react'
-import './App.css';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from './pages/Home';
-import SearchPage from "./pages/SearchPage";
-import DocumentPage from "./pages/DocumentPage";
+import { Home } from './pages/home/Home';
+import SearchPage from "./pages/search/SearchPage";
+import DocumentPage from "./pages/document/DocumentPage";
 
 export const App = () => {
     return (
-        <div className="app">
+        <div>
             <Router>
                 <Routes>
                     <Route path="/search" element={<SearchPage/>} />

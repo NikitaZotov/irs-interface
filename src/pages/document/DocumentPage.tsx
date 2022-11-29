@@ -1,14 +1,14 @@
 import React from "react";
-import "./SearchPage.css";
-import { useStateValue } from "../hooks/StateProvider";
+import { useStateValue } from "../../hooks/StateProvider";
+import { DocumentPageText } from "./styled";
 
 function DocumentPage() {
     const [{ snippet }, dispatch] = useStateValue();
 
     return (
-        <p className="documentPage__resultSnippet">
+        <DocumentPageText>
             {snippet && snippet.document}
-        </p>
+        </DocumentPageText>
     );
 }
 

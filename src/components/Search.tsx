@@ -1,14 +1,14 @@
 import * as React from "react";
-import {useEffect, useState} from "react";
-import SearchIcon from "@material-ui/icons/Search";
-import { Button } from "@material-ui/core";
-import "./Search.css";
+import { ActionTypes } from "../hooks/reducer";
+import { useEffect, useState } from "react";
 import { useStateValue } from "../hooks/StateProvider";
 import { useNavigate } from "react-router-dom";
-import { ActionTypes } from "../hooks/reducer";
 import { useLocalStorage } from "../hooks/useLocalStorage";
+import SearchIcon from "@material-ui/icons/Search";
+import { Button } from "@material-ui/core";
+import { SearchButtons, SearchButtonHidden, SearchInput, SearchInputIcon } from "./styled";
 
-function Search({ hideButtons = false }) {
+export const Search = ({ hideButtons = false }) => {
     const [, dispatch] = useStateValue();
     const navigate = useNavigate();
     const [terms, setTerm] = useState("");
@@ -36,32 +36,24 @@ function Search({ hideButtons = false }) {
     }, [getLocalTerms]);
 
     return (
-        <form className="search">
-            <div className="search__input">
-                <SearchIcon className="search__inputIcon" />
+        <form>
+            <SearchInput>
+                <SearchIcon className={SearchInputIcon} />
                 <input value={terms} onChange={onChange} />
-                {/*<MicIcon />*/}
-            </div>
+            </SearchInput>
             {!hideButtons ? (
-                <div className="search__buttons">
+                <SearchButtons>
                     <Button onClick={search} type="submit" variant="outlined">
-                        Google Search
+                        Search
                     </Button>
-                </div>
+                </SearchButtons>
             ) : (
-                <div className="search__buttons">
-                    <Button
-                        className="search__buttonsHidden"
-                        onClick={search}
-                        type="submit"
-                        variant="outlined"
-                    >
+                <SearchButtons>
+                    <SearchButtonHidden onClick={search} type="submit">
                         Google Search
-                    </Button>
-                </div>
+                    </SearchButtonHidden>
+                </SearchButtons>
             )}
         </form>
     );
 }
-
-export default Search;
