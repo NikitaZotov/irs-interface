@@ -9,13 +9,14 @@ export const useMachineSearch = (request: string) => {
             const terms = request ? request.split(" ") : [];
             client.getDocumentsSnippets(terms).then(snippets => {
                 const documents = snippets.map((item: Snippet) => item.document);
-                [client, mlClient].forEach(client => {
-                    client.getDocumentsLangs(documents).then(langs => {
-                        snippets.forEach((snippet, index) => snippet.langs.push(langs.at(index) as string));
-                    });
-                });
+                [client, mlClient].forEach(async (client, index) => {
+                    const langs = await client.getDocumentsLangs(documents);
+                    snippets.forEach((snippet, index) => snippet.langs.push(langs.at(index) as string));
 
-                setData(snippets);
+                    if (index == 1) {
+                        setData(snippets);
+                    }
+                });
             });
         };
 

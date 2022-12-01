@@ -20,6 +20,7 @@ import {
     SearchPageResultSnippet,
     SearchPageResultTitle
 } from "./styled";
+import { INTERFACE_URL } from "../../constants/common";
 
 function SearchPage() {
     const [{ input }, dispatch] = useStateValue();
@@ -76,7 +77,7 @@ function SearchPage() {
                     snippets.map((item) => (
                         <SearchPageResult>
                             <SearchPageResultTitle>
-                                http:://localhost:3000/document/{item.id}
+                                {INTERFACE_URL}/document/{item.id}
                                 <h2
                                     onClick={e => viewDocument(e, item)}>
                                     {item.document.substring(0, 250) + "..."}

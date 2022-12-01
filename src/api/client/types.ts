@@ -29,7 +29,7 @@ export interface Snippet {
     document: Document | any,
     terms: Term[],
     significancy: number | any,
-    langs: Array<string>,
+    langs: string[],
     summarization: Document,
 }
 
