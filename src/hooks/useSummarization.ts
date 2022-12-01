@@ -1,10 +1,13 @@
-import { client, mlClient } from "../api/Client"
+import {client, mlClient} from "../api/Client"
 
-export const getDocumentSummarization = async (document: string) => {
-    let summars = new Array<string>();
-
-    const [summar] = await mlClient.getDocumentsSummarizations([document]);
-    summars.push(summar);
-
-    return summars;
+export const useDocumentSummarizations = (document: string) => {
+   return [
+       {client: client, method: "SEM"},
+       {client: mlClient, method: "MLM"}
+   ].map(item => {
+       return {
+           method: item.method,
+           callback: async () => await item.client.getDocumentsSummarizations([document])
+       }
+   });
 };

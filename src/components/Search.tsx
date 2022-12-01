@@ -38,7 +38,7 @@ export const Search = ({ hideButtons = false }) => {
     return (
         <form>
             <SearchInput>
-                <SearchIcon className={SearchInputIcon} />
+                <SearchIcon />
                 <input value={terms} onChange={onChange} />
             </SearchInput>
             {!hideButtons ? (

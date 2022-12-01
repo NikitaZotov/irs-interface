@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { Search } from "../../components/Search";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { useMachineSearch } from "../../hooks/useMachineSearch";
-import { getDocumentSummarization } from "../../hooks/useSummarization";
+import { useDocumentSummarizations } from "../../hooks/useSummarization";
 import SearchLogo from "./search_logo.png";
 import DownloadLink from "react-download-link"
 import {
@@ -89,11 +89,14 @@ function SearchPage() {
                             <SearchPageResultSnippet>
                                 Language: {item.langs.at(0)} (FWM), {item.langs.at(1)} (MLM)
                             </SearchPageResultSnippet>
-                            <DownloadLink
-                                label="Download summarization"
-                                filename="fileName.txt"
-                                exportFile={async () => await getDocumentSummarization(item.document)}
-                            />
+                            {useDocumentSummarizations(item.document).map(item =>
+                                (<DownloadLink
+                                        label={`Download summarization (${item.method})`}
+                                        filename="summarization.txt"
+                                        exportFile={item.callback}
+                                    />
+                                )
+                            )}
                         </SearchPageResult>
                     ))
                     :
