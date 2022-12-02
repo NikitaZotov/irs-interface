@@ -24,13 +24,23 @@ export interface DocumentAttributes {
     significancy: number,
 }
 
+export interface Language {
+    lang: string,
+    method: string
+}
+
 export interface Snippet {
     id: string,
     document: Document | any,
     terms: Term[],
     significancy: number | any,
-    langs: string[],
+    langs: Language[],
     summarization: Document,
+}
+
+export interface IGetDocumentsLangs {
+    documents: Document[],
+    method_type: Number,
 }
 
 export type TAction =
@@ -63,7 +73,7 @@ export type TGetDocumentsArgs = Args<
 
 export type TGetDocumentsLangsArgs = Args<
     "get_langs",
-    Document[],
+    IGetDocumentsLangs | Document[],
     string[]
     >;
 

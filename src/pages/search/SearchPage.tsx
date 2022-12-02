@@ -88,7 +88,7 @@ function SearchPage() {
                                 Used keys: {item.terms.map(term => ` ${term}`).toString()}
                             </SearchPageResultSnippet>
                             <SearchPageResultSnippet>
-                                Language: {item.langs.at(0)} (FWM), {item.langs.at(1)} (MLM)
+                                Language: {item.langs.map(item => ` ${item.lang} (${item.method})`).toString()}
                             </SearchPageResultSnippet>
                             {useDocumentSummarizations(item.document).map(item =>
                                 (<DownloadLink

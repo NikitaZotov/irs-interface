@@ -165,11 +165,18 @@ export class IrsClient {
         });
     }
 
-    public async getDocumentsLangs(documents: Document[]) {
+    public async getDocumentsLangs(type: Number, documents: Document[]) {
         return new Promise<string[]>((resolve) => {
             if (!documents.length) return resolve([]);
 
-            this.sendMessage("get_langs", documents, (response) => {
+            const request = type
+                ? {
+                    "documents": documents,
+                    "method_type": type,
+                }
+                : documents;
+
+            this.sendMessage("get_langs", request, (response) => {
                 resolve(response.payload);
             });
         });
