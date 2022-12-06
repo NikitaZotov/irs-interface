@@ -1,24 +1,25 @@
 import * as React from "react";
 import { ActionTypes } from "../hooks/reducer";
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import { useStateValue } from "../hooks/StateProvider";
 import { useNavigate } from "react-router-dom";
 import { useLocalStorage } from "../hooks/useLocalStorage";
 import SearchIcon from "@material-ui/icons/Search";
 import { Button } from "@material-ui/core";
-import { SearchButtons, SearchButtonHidden, SearchInput, SearchInputIcon } from "./styled";
+import { SearchButton, SearchButtonHidden, SearchInput, MicroButton } from "./styled";
+import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
 
 export const Search = ({ hideButtons = false }) => {
     const [, dispatch] = useStateValue();
     const navigate = useNavigate();
-    const [terms, setTerm] = useState("");
+    const [input, setInput] = useState("");
 
     const search = (e: any) => {
         e.preventDefault();
 
         dispatch({
             type: ActionTypes.SET_SEARCH_TERM,
-            terms: terms,
+            terms: input,
         });
 
         navigate(`/search`);
@@ -27,32 +28,73 @@ export const Search = ({ hideButtons = false }) => {
     const [getLocalTerms, setLocalTerms,] = useLocalStorage("terms");
 
     const onChange = (e: any) => {
-        setTerm(e.target.value);
+        e.preventDefault();
+
+        setInput(e.target.value);
         setLocalTerms(e.target.value);
     }
 
+    const handleKeypress = (e: any) => {
+        if (e.key === "Enter") {
+            search(e);
+        }
+    };
+
     useEffect(() => {
-        setTerm(getLocalTerms());
+        setInput(getLocalTerms());
     }, [getLocalTerms]);
+
+    const { finalTranscript, resetTranscript } = useSpeechRecognition();
+    useEffect(() => {
+        console.log(finalTranscript);
+        if (finalTranscript !== "") {
+            setSpeaking(false);
+            setInput(finalTranscript);
+            resetTranscript();
+        }
+    });
+
+    const [isSpeaking, setSpeaking] = useState(false);
+    const speechToInput = (e: any) => {
+        e.preventDefault();
+
+        setSpeaking(!isSpeaking);
+        !isSpeaking
+            ? SpeechRecognition.startListening({
+                continuous: true,
+            })
+            : SpeechRecognition.stopListening();
+    };
 
     return (
         <form>
             <SearchInput>
                 <SearchIcon />
-                <input value={terms} onChange={onChange} />
+                <input
+                    type="text"
+                    placeholder="Type request"
+                    value={input}
+                    onChange={onChange}
+                    onKeyPress={handleKeypress}
+                />
+                <div>
+                    <MicroButton isSpeaking={isSpeaking} onClick={speechToInput}>
+                        <i className="fa fa-microphone"></i>
+                    </MicroButton>
+                </div>
             </SearchInput>
             {!hideButtons ? (
-                <SearchButtons>
+                <SearchButton>
                     <Button onClick={search} type="submit" variant="outlined">
                         Search
                     </Button>
-                </SearchButtons>
+                </SearchButton>
             ) : (
-                <SearchButtons>
+                <SearchButton>
                     <SearchButtonHidden onClick={search} type="submit">
-                        Google Search
+                        Search
                     </SearchButtonHidden>
-                </SearchButtons>
+                </SearchButton>
             )}
         </form>
     );

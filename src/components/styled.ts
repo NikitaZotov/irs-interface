@@ -1,3 +1,4 @@
+/* eslint-disable */
 import styled from 'styled-components';
 
 export const SearchInput = styled.div`
@@ -21,21 +22,38 @@ export const SearchInput = styled.div`
   };
 `;
 
-export const SearchInputIcon = styled.div`
-  color: gray;
-`;
+export const MicroButton = styled.button<{ isSpeaking: boolean }>`
+  display: flex;
+  justify-content: center;
+  & {
+    align-items: center;
+    padding: 10px 20px;
+    border: 1px solid ${p => p.isSpeaking ? `#f1f1f1` : `#c6c6c6`}};
+    background-color: "${p => p.isSpeaking ? `#f8f8f8` : `#ffffff`}}";
+    border-radius: 800px;
+    font-size: medium;
+  };
+  &:hover {
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+    background-image: -webkit-linear-gradient(top, #f8f8f8, #f1f1f1);
+    background-color: #f8f8f8;
+    border: 1px solid #c6c6c6;
+    color: #222;
+  };
+`
 
-export const SearchButtons = styled.div`
+export const SearchButton = styled.div`
   margin-top: 30px;
   display: flex;
   justify-content: center;
   & button {
     margin: 5px;
-    padding: 7px 15px;
-    border: 1px solid white;
+    padding: 10px 20px;
+    border: 1px solid lightgray;
     background-color: #f8f8f8;
     text-transform: inherit;
-    color: #5f6368;
+    border-radius: 800px;
+    font-size: medium;
   };
   & button:hover {
     box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);

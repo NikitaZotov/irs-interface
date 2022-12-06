@@ -13,7 +13,9 @@
     "react-download-link": "^2.3.0",
     "react-router-dom": "^6.4.2",
     "react-scripts": "^5.0.1",
+    "react-speech-recognition": "^3.10.0",
     "styled-components": "^5.3.6",
+    "font-awesome": "^4.7.0",
     "typescript": "^4.8.4",
     "web-vitals": "^2.1.4",
     "yarn": "^1.22.19"
@@ -37,6 +39,8 @@
     ]
   },
   "devDependencies": {
+    "@speechly/speech-recognition-polyfill": "^1.2.0",
+    "@types/react-speech-recognition": "^3.9.0",
     "@types/styled-components": "^5.1.26"
   }
 }
