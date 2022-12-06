@@ -1,6 +1,6 @@
 import * as React from "react";
 import { ActionTypes } from "../hooks/reducer";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import { useStateValue } from "../hooks/StateProvider";
 import { useNavigate } from "react-router-dom";
 import { useLocalStorage } from "../hooks/useLocalStorage";
@@ -44,7 +44,22 @@ export const Search = ({ hideButtons = false }) => {
         setInput(getLocalTerms());
     }, [getLocalTerms]);
 
-    const { finalTranscript, resetTranscript } = useSpeechRecognition();
+    const commands = [
+        {
+            command: 'reset',
+            callback: () => resetTranscript()
+        },
+        {
+            command: 'good bye',
+            callback: () => setInput('I wasn\'t talking.')
+        },
+        {
+            command: 'Hello',
+            callback: () => setInput('Hi there!')
+        },
+    ]
+
+    const { finalTranscript, resetTranscript } = useSpeechRecognition({ commands });
     useEffect(() => {
         console.log(finalTranscript);
         if (finalTranscript !== "") {
