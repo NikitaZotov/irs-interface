@@ -15,8 +15,7 @@ export const Search = ({ hideButtons = false }) => {
     const [input, setInput] = useState("");
 
     const search = (e: any) => {
-        e.preventDefault();
-
+        // e.preventDefault();
         dispatch({
             type: ActionTypes.SET_SEARCH_TERM,
             terms: input,
@@ -37,6 +36,12 @@ export const Search = ({ hideButtons = false }) => {
     const handleKeypress = (e: any) => {
         if (e.key === "Enter") {
             search(e);
+        }
+    };
+
+    const preventKeypress = (e: any) => {
+        if (e.key === "Enter") {
+            e.preventDefault();
         }
     };
 
@@ -82,7 +87,7 @@ export const Search = ({ hideButtons = false }) => {
     };
 
     return (
-        <form>
+        <form onKeyDown={preventKeypress}>
             <SearchInput>
                 <SearchIcon />
                 <input
@@ -90,7 +95,7 @@ export const Search = ({ hideButtons = false }) => {
                     placeholder="Type request"
                     value={input}
                     onChange={onChange}
-                    onKeyPress={handleKeypress}
+                    onKeyDown={handleKeypress}
                 />
                 <div>
                     <MicroButton isSpeaking={isSpeaking} onClick={speechToInput}>

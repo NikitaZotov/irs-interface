@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React, { createContext, ReactElement, useContext, useReducer } from "react";
 import { initialState, IState } from "./reducer";
 

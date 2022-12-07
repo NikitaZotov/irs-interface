@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { ActionTypes } from "../../hooks/reducer";
 import { Snippet } from "../../api/client/types";
 import React, { useEffect, useState } from "react";
@@ -18,9 +19,13 @@ import {
     SearchPageResultCount,
     SearchPageResults,
     SearchPageResultSnippet,
-    SearchPageResultTitle
+    SearchPageResultTitle,
+    SpeechButton
 } from "./styled";
 import { INTERFACE_URL } from "../../constants/common";
+import { VoiceSelector } from "../../components/speech/VoiceSelector";
+import { SpeechContainer } from "../../components/speech/styled";
+import { rates, VoiceRateSelector } from "../../components/speech/VoiceRateSelector";
 
 function SearchPage() {
     const [{ input }, dispatch] = useStateValue();
@@ -56,6 +61,46 @@ function SearchPage() {
         return [snippets, perfTime];
     })(terms);
 
+    const [selectedVoice, setSelectedVoice] = useState<number[]>([]);
+    const setSelectedVoiceInc = (voice: number, index: number) => {
+        setSelectedVoice((voices) => {
+            console.log(voices.length);
+            console.log(index);
+
+            return voices.length <= index
+                ? [...voices, voice]
+                : [...voices.slice(0, index), voice, ...voices.slice(index + 1)];
+        });
+    }
+
+    const [selectedVoiceRate, setSelectedVoiceRate] = useState<number[]>([]);
+    const setSelectedVoiceRateInc = (voiceRate: number, index: number) => {
+        setSelectedVoiceRate((voiceRates) => {
+            if (voiceRates.length <= index)
+                return [...voiceRates, voiceRate];
+            else {
+                voiceRates[index] = voiceRate;
+                return voiceRates;
+            }
+        });
+    }
+
+    const speak = (e: any, text: string, selectedVoice: number, selectedVoiceRate: number) => {
+        e.preventDefault();
+
+        const synth = window.speechSynthesis;
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.voice = synth.getVoices()[selectedVoice];
+        utterance.rate = rates[selectedVoiceRate].key;
+
+        synth.cancel();
+        synth.speak(utterance);
+    };
+
+    const cutText = (item: any) => {
+        return item.document.substring(0, 250);
+    };
+
     return (
         <div>
             <SearchPageHeader>
@@ -74,13 +119,13 @@ function SearchPage() {
                 </SearchPageResultCount>
 
                 {terms ?
-                    snippets.map((item) => (
+                    snippets.map((item, index) => (
                         <SearchPageResult>
                             <SearchPageResultTitle>
                                 {INTERFACE_URL}/document/{item.id}
                                 <h2
                                     onClick={e => viewDocument(e, item)}>
-                                    {item.document.substring(0, 250) + "..."}
+                                    {cutText(item) + "..."}
                                 </h2>
                             </SearchPageResultTitle>
 
@@ -98,6 +143,22 @@ function SearchPage() {
                                     />
                                 )
                             )}
+                            <SpeechContainer>
+                                <VoiceSelector
+                                    selected={selectedVoice[index]}
+                                    setSelected={(voice: number) => setSelectedVoiceInc(voice, index)}
+                                    lang={item.langs[0].lang}
+                                />
+                                <VoiceRateSelector
+                                    selected={selectedVoiceRate[index]}
+                                    setSelected={(voiceRate: number) => setSelectedVoiceRateInc(voiceRate, index)}
+                                />
+                                <SpeechButton onClick={e =>
+                                    speak(e, cutText(item), selectedVoice[index], selectedVoiceRate[index])
+                                }>
+                                    <i className="fa fa-file-audio-o"></i>
+                                </SpeechButton>
+                            </SpeechContainer>
                         </SearchPageResult>
                     ))
                     :

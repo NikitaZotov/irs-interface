@@ -1,3 +1,4 @@
+/* eslint-disable */
 export interface IState {
     terms: null,
     snippet: null,
