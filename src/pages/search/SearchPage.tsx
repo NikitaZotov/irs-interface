@@ -9,6 +9,7 @@ import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { useMachineSearch } from "../../hooks/useMachineSearch";
 import { getDocumentSummarizations } from "../../hooks/getSummarization";
 import { getDocumentTranslations } from "../../hooks/getTranslation";
+import { getFrequentWords } from "../../hooks/getFrequentWords";
 import SearchLogo from "./search_logo.png";
 import DownloadLink from "react-download-link"
 import {
@@ -28,6 +29,7 @@ import { INTERFACE_URL } from "../../constants/common";
 import { VoiceSelector } from "../../components/speech/VoiceSelector";
 import { SpeechContainer } from "../../components/speech/styled";
 import { rates, VoiceRateSelector } from "../../components/speech/VoiceRateSelector";
+import {countWords} from "../../hooks/countWords";
 
 function SearchPage() {
     const [{ input }, dispatch] = useStateValue();
@@ -135,9 +137,10 @@ function SearchPage() {
                                 {INTERFACE_URL}/document/{item.id}
                                 <h2
                                     onClick={e => viewDocument(e, item)}>
-                                    {cutText(item) + "..."}
+                                    {`${cutText(item)}...`}
                                 </h2>
                             </DocumentLink>
+                            Total size: {countWords(item.document)}
 
                             <SearchPageResultSnippet>
                                 Used keys: {item.terms.map(term => ` ${term}`).toString()}
@@ -159,6 +162,14 @@ function SearchPage() {
                                         key={`down_translation_${Math.random()}`}
                                         label={`Download ${item.lang} translation`}
                                         filename="translation.txt"
+                                        exportFile={item.callback}
+                                    />)
+                                )}
+                                {getFrequentWords(item.document).map(item =>
+                                    (<DownloadLink
+                                        key={`down_fr_words_${Math.random()}`}
+                                        label={`Download ${item.lang} frequent words`}
+                                        filename="frequent_words.txt"
                                         exportFile={item.callback}
                                     />)
                                 )}

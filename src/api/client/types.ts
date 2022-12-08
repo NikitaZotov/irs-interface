@@ -53,7 +53,8 @@ export type TAction =
     | "get_documents"
     | "get_langs"
     | "get_summars"
-    | "get_translations";
+    | "get_translations"
+    | "get_frequent_words";
 
 export type TWSCallback<
     Payload extends unknown = unknown,
@@ -94,3 +95,9 @@ export type TGetDocumentsTranslationsArgs = Args<
     IGetDocumentsTranslations,
     Document[]
     >;
+
+export type TGetDocumentsFrequentWordsArgs = Args<
+    "get_frequent_words",
+    IGetDocumentsTranslations,
+    Map<string, string>[]
+>;

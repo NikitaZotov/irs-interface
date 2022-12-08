@@ -10,7 +10,7 @@ import {
     IGetDocuments,
     TGetDocumentsLangsArgs,
     TGetDocumentsSummarizationsArgs,
-    TGetDocumentsTranslationsArgs
+    TGetDocumentsTranslationsArgs, TGetDocumentsFrequentWordsArgs
 } from "./types";
 
 export interface Response<T = any> {
@@ -66,6 +66,8 @@ export class IrsClient {
     private sendMessage(...args: TGetDocumentsSummarizationsArgs): void;
 
     private sendMessage(...args: TGetDocumentsTranslationsArgs): void;
+
+    private sendMessage(...args: TGetDocumentsFrequentWordsArgs): void;
 
     private sendMessage(actionType: string, payload: unknown, callback: TWSCallback<any>): void {
         this._eventID++;
@@ -206,6 +208,29 @@ export class IrsClient {
 
             this.sendMessage("get_translations", request, (response) => {
                 resolve(response.payload);
+            });
+        });
+    }
+
+    public async getDocumentsFrequentWords(documents: Document[], targetLanguage: string) {
+        return new Promise<Map<string, string>[]>((resolve) => {
+            if (!documents.length) return resolve([]);
+
+            const request = {
+                documents: documents,
+                lang: targetLanguage,
+            }
+
+            const toMap = (object: any): Map<string, string> => {
+                let map = new Map();
+                for (let i in object) {
+                    map.set(i, object[i]);
+                }
+                return map;
+            }
+
+            this.sendMessage("get_frequent_words", request, (response) => {
+                resolve(response.payload.map(map => toMap(map)));
             });
         });
     }
