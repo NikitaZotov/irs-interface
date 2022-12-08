@@ -64,28 +64,25 @@ function SearchPage() {
     const [selectedVoice, setSelectedVoice] = useState<number[]>([]);
     const setSelectedVoiceInc = (voice: number, index: number) => {
         setSelectedVoice((voices) => {
-            console.log(voices.length);
-            console.log(index);
-
             return voices.length <= index
                 ? [...voices, voice]
-                : [...voices.slice(0, index), voice, ...voices.slice(index + 1)];
+                : [...voices.slice(0, index), voice, ...voices.slice(index + 2)];
         });
     }
 
     const [selectedVoiceRate, setSelectedVoiceRate] = useState<number[]>([]);
     const setSelectedVoiceRateInc = (voiceRate: number, index: number) => {
+        console.log(index);
+        console.log(voiceRate);
+
         setSelectedVoiceRate((voiceRates) => {
-            if (voiceRates.length <= index)
-                return [...voiceRates, voiceRate];
-            else {
-                voiceRates[index] = voiceRate;
-                return voiceRates;
-            }
+            return voiceRates.length <= index
+                ? [...voiceRates, voiceRate]
+                : [...voiceRates.slice(0, index), voiceRate, ...voiceRates.slice(index + 2)];
         });
     }
 
-    const speak = (e: any, text: string, selectedVoice: number, selectedVoiceRate: number) => {
+    const speak = (e: any, text: string, selectedVoice: number, selectedVoiceRate: number = 2) => {
         e.preventDefault();
 
         const synth = window.speechSynthesis;
@@ -137,6 +134,7 @@ function SearchPage() {
                             </SearchPageResultSnippet>
                             {useDocumentSummarizations(item.document).map(item =>
                                 (<DownloadLink
+                                        key={`down_link_${Math.random()}`}
                                         label={`Download summarization (${item.method})`}
                                         filename="summarization.txt"
                                         exportFile={item.callback}
