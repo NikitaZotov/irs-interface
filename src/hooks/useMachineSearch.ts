@@ -9,20 +9,16 @@ export const useMachineSearch = (request: string) => {
             const terms = request ? request.split(" ") : [];
             client.getDocumentsSnippets(terms).then(snippets => {
                 const documents = snippets.map((item: Snippet) => item.document);
-                [
+                Promise.all([
                     { method_type: 1, method_name: "FWM", client: client },
                     { method_type: 2, method_name: "AM", client: client },
                     { method_type: 0, method_name: "MLM", client: mlClient }
-                ].forEach(async (item, index) => {
+                ].map(async (item) => {
                     const langs = await item.client.getDocumentsLangs(item.method_type, documents);
                     snippets.forEach((snippet, index) => {
                         snippet.langs.push({lang: langs.at(index) as string, method: item.method_name})
                     });
-
-                    if (index == 2) {
-                        setData(snippets);
-                    }
-                });
+                })).then(_ => setData(snippets));
             });
         };
 
