@@ -1,6 +1,6 @@
 import {client, mlClient} from "../api/Client"
 
-export const useDocumentSummarizations = (document: string) => {
+export const getDocumentSummarizations = (document: string) => {
    return [
        {client: client, method: "SEM"},
        {client: mlClient, method: "MLM"}

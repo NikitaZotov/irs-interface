@@ -71,7 +71,7 @@ export const SearchPageResults = styled.div`
   margin-bottom: 100px;
 `;
 
-export const SearchPageResultTitle = styled.a`
+export const DocumentLink = styled.a`
   text-decoration: none;
   text-align: justify;
   &:hover {
@@ -81,6 +81,10 @@ export const SearchPageResultTitle = styled.a`
     font-weight: 400;
     color: #1a0dab;
   }
+`;
+
+export const TranslationLink = styled.div`
+  margin-top: 10px;
 `;
 
 export const SearchPageResultSnippet = styled.p`

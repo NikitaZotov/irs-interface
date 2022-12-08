@@ -7,10 +7,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { Search } from "../../components/Search";
 import { useLocalStorage } from "../../hooks/useLocalStorage";
 import { useMachineSearch } from "../../hooks/useMachineSearch";
-import { useDocumentSummarizations } from "../../hooks/useSummarization";
+import { getDocumentSummarizations } from "../../hooks/getSummarization";
+import { getDocumentTranslations } from "../../hooks/getTranslation";
 import SearchLogo from "./search_logo.png";
 import DownloadLink from "react-download-link"
 import {
+    DocumentLink,
+    TranslationLink,
     SearchPageHeader,
     SearchPageHeaderBody,
     SearchPageLogo,
@@ -19,8 +22,7 @@ import {
     SearchPageResultCount,
     SearchPageResults,
     SearchPageResultSnippet,
-    SearchPageResultTitle,
-    SpeechButton
+    SpeechButton,
 } from "./styled";
 import { INTERFACE_URL } from "../../constants/common";
 import { VoiceSelector } from "../../components/speech/VoiceSelector";
@@ -82,6 +84,17 @@ function SearchPage() {
         });
     }
 
+    const viewDocumentTranslation = (e: any, snippet: Snippet) => {
+        e.preventDefault();
+
+        dispatch({
+            type: ActionTypes.SET_SNIPPET,
+            snippet: snippet,
+        });
+
+        navigate(`/translation/` + snippet.id);
+    };
+
     const speak = (e: any, text: string, selectedVoice: number, selectedVoiceRate: number = 2) => {
         e.preventDefault();
 
@@ -118,13 +131,13 @@ function SearchPage() {
                 {terms ?
                     snippets.map((item, index) => (
                         <SearchPageResult>
-                            <SearchPageResultTitle>
+                            <DocumentLink>
                                 {INTERFACE_URL}/document/{item.id}
                                 <h2
                                     onClick={e => viewDocument(e, item)}>
                                     {cutText(item) + "..."}
                                 </h2>
-                            </SearchPageResultTitle>
+                            </DocumentLink>
 
                             <SearchPageResultSnippet>
                                 Used keys: {item.terms.map(term => ` ${term}`).toString()}
@@ -132,15 +145,24 @@ function SearchPage() {
                             <SearchPageResultSnippet>
                                 Language: {item.langs.map(item => ` ${item.lang} (${item.method})`).toString()}
                             </SearchPageResultSnippet>
-                            {useDocumentSummarizations(item.document).map(item =>
+                            {getDocumentSummarizations(item.document).map(item =>
                                 (<DownloadLink
-                                        key={`down_link_${Math.random()}`}
-                                        label={`Download summarization (${item.method})`}
-                                        filename="summarization.txt"
-                                        exportFile={item.callback}
-                                    />
-                                )
+                                    key={`down_link_${Math.random()}`}
+                                    label={`Download summarization (${item.method})`}
+                                    filename="summarization.txt"
+                                    exportFile={item.callback}
+                                />)
                             )}
+                            <TranslationLink>
+                                {getDocumentTranslations(item.document).map(item =>
+                                    (<DownloadLink
+                                        key={`down_translation_${Math.random()}`}
+                                        label={`Download ${item.lang} translation`}
+                                        filename="translation.txt"
+                                        exportFile={item.callback}
+                                    />)
+                                )}
+                            </TranslationLink>
                             <SpeechContainer>
                                 <VoiceSelector
                                     selected={selectedVoice[index]}

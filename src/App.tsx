@@ -12,6 +12,7 @@ export const App = () => {
                     <Route path="/search" element={<SearchPage/>} />
                     <Route path="/" element={<Home/>} />
                     <Route path="/document/*" element={<DocumentPage/>} />
+                    <Route path="/translation/*" element={<DocumentPage/>} />
                 </Routes>
             </Router>
         </div>

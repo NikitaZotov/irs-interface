@@ -43,11 +43,17 @@ export interface IGetDocumentsLangs {
     method_type: Number,
 }
 
+export interface IGetDocumentsTranslations {
+    documents: Document[],
+    lang: string,
+}
+
 export type TAction =
     | "add_documents"
     | "get_documents"
     | "get_langs"
-    | "get_summars";
+    | "get_summars"
+    | "get_translations";
 
 export type TWSCallback<
     Payload extends unknown = unknown,
@@ -81,4 +87,10 @@ export type TGetDocumentsSummarizationsArgs = Args<
     "get_summars",
     Document[],
     string[]
+    >;
+
+export type TGetDocumentsTranslationsArgs = Args<
+    "get_translations",
+    IGetDocumentsTranslations,
+    Document[]
     >;

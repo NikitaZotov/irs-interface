@@ -9,7 +9,8 @@ import {
     DocumentAttributes,
     IGetDocuments,
     TGetDocumentsLangsArgs,
-    TGetDocumentsSummarizationsArgs
+    TGetDocumentsSummarizationsArgs,
+    TGetDocumentsTranslationsArgs
 } from "./types";
 
 export interface Response<T = any> {
@@ -63,6 +64,8 @@ export class IrsClient {
     private sendMessage(...args: TGetDocumentsArgs): void;
     private sendMessage(...args: TGetDocumentsLangsArgs): void;
     private sendMessage(...args: TGetDocumentsSummarizationsArgs): void;
+
+    private sendMessage(...args: TGetDocumentsTranslationsArgs): void;
 
     private sendMessage(actionType: string, payload: unknown, callback: TWSCallback<any>): void {
         this._eventID++;
@@ -171,8 +174,8 @@ export class IrsClient {
 
             const request = type
                 ? {
-                    "documents": documents,
-                    "method_type": type,
+                    documents: documents,
+                    method_type: type,
                 }
                 : documents;
 
@@ -187,6 +190,21 @@ export class IrsClient {
             if (!documents.length) return resolve([]);
 
             this.sendMessage("get_summars", documents, (response) => {
+                resolve(response.payload);
+            });
+        });
+    }
+
+    public async getDocumentsTranslations(documents: Document[], targetLanguage: string) {
+        return new Promise<Document[]>((resolve) => {
+            if (!documents.length) return resolve([]);
+
+            const request = {
+                documents: documents,
+                lang: targetLanguage,
+            }
+
+            this.sendMessage("get_translations", request, (response) => {
                 resolve(response.payload);
             });
         });

@@ -79,11 +79,16 @@ export const Search = ({ hideButtons = false }) => {
         e.preventDefault();
 
         setSpeaking(!isSpeaking);
-        !isSpeaking
-            ? SpeechRecognition.startListening({
-                continuous: true,
-            })
-            : SpeechRecognition.stopListening();
+        setSpeaking(isSpeaking => {
+            if (isSpeaking) {
+                SpeechRecognition.startListening({
+                    continuous: true,
+                })
+            } else {
+                SpeechRecognition.stopListening();
+            }
+            return isSpeaking;
+        });
     };
 
     return (
