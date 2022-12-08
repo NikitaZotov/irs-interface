@@ -18,18 +18,17 @@ import {
     SearchPageHeader,
     SearchPageHeaderBody,
     SearchPageLogo,
-    SearchPageNoResult,
     SearchPageResult,
     SearchPageResultCount,
     SearchPageResults,
     SearchPageResultSnippet,
-    SpeechButton,
+    SpeechButton, SearchPageNoResult,
 } from "./styled";
-import { INTERFACE_URL } from "../../constants/common";
+import { INTERFACE_URL, NLP_URL } from "../../constants/common";
 import { VoiceSelector } from "../../components/speech/VoiceSelector";
 import { SpeechContainer } from "../../components/speech/styled";
 import { rates, VoiceRateSelector } from "../../components/speech/VoiceRateSelector";
-import {countWords} from "../../hooks/countWords";
+import { countWords } from "../../hooks/countWords";
 
 function SearchPage() {
     const [{ input }, dispatch] = useStateValue();
@@ -76,9 +75,6 @@ function SearchPage() {
 
     const [selectedVoiceRate, setSelectedVoiceRate] = useState<number[]>([]);
     const setSelectedVoiceRateInc = (voiceRate: number, index: number) => {
-        console.log(index);
-        console.log(voiceRate);
-
         setSelectedVoiceRate((voiceRates) => {
             return voiceRates.length <= index
                 ? [...voiceRates, voiceRate]
@@ -140,8 +136,9 @@ function SearchPage() {
                                     {`${cutText(item)}...`}
                                 </h2>
                             </DocumentLink>
-                            Total size: {countWords(item.document)}
-
+                            <SearchPageResultSnippet>
+                                Total size: {countWords(item.document)}
+                            </SearchPageResultSnippet>
                             <SearchPageResultSnippet>
                                 Used keys: {item.terms.map(term => ` ${term}`).toString()}
                             </SearchPageResultSnippet>
@@ -174,6 +171,7 @@ function SearchPage() {
                                     />)
                                 )}
                             </TranslationLink>
+                            <a href={`${NLP_URL}/v2/input?title=document_${item.id}&content=${item.document}`}>Analyse document</a>
                             <SpeechContainer>
                                 <VoiceSelector
                                     selected={selectedVoice[index]}
