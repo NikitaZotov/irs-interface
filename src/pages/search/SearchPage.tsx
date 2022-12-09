@@ -22,7 +22,8 @@ import {
     SearchPageResultCount,
     SearchPageResults,
     SearchPageResultSnippet,
-    SpeechButton, SearchPageNoResult,
+    SpeechButton,
+    SearchPageNoResult,
 } from "./styled";
 import { INTERFACE_URL, NLP_URL } from "../../constants/common";
 import { VoiceSelector } from "../../components/speech/VoiceSelector";

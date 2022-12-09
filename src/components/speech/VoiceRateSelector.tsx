@@ -1,5 +1,5 @@
 /* eslint-disable */
-import { Select, Option} from "./styled";
+import { Select, Option } from "./styled";
 
 export const rates = [
     { key: 0.5, description: "Very slowly" },

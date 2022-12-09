@@ -1,6 +1,6 @@
 /* eslint-disable */
 import { useCallback, useEffect, useState } from "react";
-import { Select, Option} from "./styled";
+import { Select, Option } from "./styled";
 
 const synth = window.speechSynthesis;
 

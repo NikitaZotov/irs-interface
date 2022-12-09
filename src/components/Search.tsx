@@ -66,7 +66,6 @@ export const Search = ({ hideButtons = false }) => {
 
     const { finalTranscript, resetTranscript } = useSpeechRecognition({ commands });
     useEffect(() => {
-        console.log(finalTranscript);
         if (finalTranscript !== "") {
             setSpeaking(false);
             setInput(finalTranscript);

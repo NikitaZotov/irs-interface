@@ -10,7 +10,8 @@ import {
     IGetDocuments,
     TGetDocumentsLangsArgs,
     TGetDocumentsSummarizationsArgs,
-    TGetDocumentsTranslationsArgs, TGetDocumentsFrequentWordsArgs
+    TGetDocumentsTranslationsArgs,
+    TGetDocumentsFrequentWordsArgs
 } from "./types";
 
 export interface Response<T = any> {
